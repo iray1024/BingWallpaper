@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BingWallpaper"
         mc:Ignorable="d"
-        Title="BingWallpaper - Ray" Height="400" Width="528" Visibility="Hidden" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/favicon.png" Topmost="True">
+        Title="BingWallpaper - Ray" Height="400" Width="528" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/favicon.png" Topmost="True">
     <Grid>
         <Image x:Name="Img_bing" Margin="0,0,0,50"/>
-        <Button x:Name="Btn_switch" Content="更换壁纸" Visibility="Hidden" Width="80" Height="25" Margin="0,318,0,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_Click" VerticalAlignment="Top" HorizontalAlignment="Center" />
+
+        <Button x:Name="Btn_switch_pre" Content="上一张" Width="80" Height="25" Margin="130,318,0,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_pre_Click" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Button x:Name="Btn_switch" Content="更换壁纸" Width="80" Height="25" Margin="0,318,0,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_Click" VerticalAlignment="Top" HorizontalAlignment="Center" />
+        <Button x:Name="Btn_switch_next" Content="下一张" Width="80" Height="25" Margin="0,318,130,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_next_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
     </Grid>
 </Window>

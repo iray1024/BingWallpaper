@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using BingWallpaper.Proxy;
+using System;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -18,7 +14,7 @@ namespace BingWallpaper
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfo", CharSet = CharSet.Unicode)]
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
-        private string _imgPath = string.Empty;
+        private readonly BingWallpaperGetter _getter = new();
 
         public MainWindow()
         {
@@ -27,68 +23,86 @@ namespace BingWallpaper
             Setup();
         }
 
-        private async void Setup()
+        private void Setup()
         {
-            var url = await GetTodayBingWallpaperUrlAsync();
+            var todayImgUri = _getter.Default();
 
-            _imgPath = await DownloadWallpaperFileAsync(url);
-
-            if (!string.IsNullOrEmpty(_imgPath))
+            if (todayImgUri is not null)
             {
                 Visibility = Btn_switch.Visibility = Visibility.Visible;
 
-                Img_bing.Source = new BitmapImage(new Uri(_imgPath));
+                Img_bing.Source = new BitmapImage(todayImgUri);
             }
         }
 
-        private static async Task<string> GetTodayBingWallpaperUrlAsync()
+        //private static async Task<string> GetTodayBingWallpaperUrlAsync()
+        //{
+        //    using var client = new WebClient() { Encoding = Encoding.UTF8 };
+
+        //    try
+        //    {
+        //        var html = await client.DownloadStringTaskAsync("https://cn.bing.com/");
+
+        //        var match = Regex.Match(html, "rel=\"preload\".*?href=\"(.+?)\" as=\"image\"");
+
+        //        return string.Format("https://cn.bing.com{0}", match.Groups[1].Value);
+        //    }
+        //    catch (WebException)
+        //    {
+
+        //        MessageBox.Show("获取必应壁纸失败", "BingWallpaper - Ray", MessageBoxButton.OK, MessageBoxImage.Stop);
+
+        //        Environment.Exit(-1);
+
+        //        return "";
+        //    }
+        //}
+
+        //private static async Task<string> DownloadWallpaperFileAsync(string url)
+        //{
+        //    using var client = new WebClient();
+
+        //    var filePath = Path.Combine(Path.GetTempPath(), ".wallpaper", $"bing-{DateTime.Now.Date:yyyy_mm_dd}.jpg");
+
+        //    try
+        //    {
+        //        await client.DownloadFileTaskAsync(url, filePath);
+
+        //        return filePath;
+        //    }
+        //    catch (WebException)
+        //    {
+        //        MessageBox.Show("下载必应壁纸失败");
+
+        //        Environment.Exit(-1);
+
+        //        return "";
+        //    }
+        //}
+
+        private void Btn_switch_pre_Click(object sender, RoutedEventArgs e)
         {
-            using var client = new WebClient() { Encoding = Encoding.UTF8 };
+            var preImgUri = _getter.Preview();
 
-            try
+            if (preImgUri is not null)
             {
-                var html = await client.DownloadStringTaskAsync("https://cn.bing.com/");
-
-                var match = Regex.Match(html, "rel=\"preload\".*?href=\"(.+?)\" as=\"image\"");
-
-                return string.Format("https://cn.bing.com{0}", match.Groups[1].Value);
-            }
-            catch (WebException)
-            {
-
-                MessageBox.Show("获取必应壁纸失败", "BingWallpaper - Ray", MessageBoxButton.OK, MessageBoxImage.Stop);
-
-                Environment.Exit(-1);
-
-                return "";
+                Img_bing.Source = new BitmapImage(preImgUri);
             }
         }
 
-        private static async Task<string> DownloadWallpaperFileAsync(string url)
+        private void Btn_switch_next_Click(object sender, RoutedEventArgs e)
         {
-            using var client = new WebClient();
+            var nextImgUri = _getter.Next();
 
-            var filePath = Path.Combine(Path.GetTempPath(), ".wallpaper", $"bing-{DateTime.Now.Date:yyyy_mm_dd}.jpg");
-
-            try
+            if (nextImgUri is not null)
             {
-                await client.DownloadFileTaskAsync(url, filePath);
-
-                return filePath;
-            }
-            catch (WebException)
-            {
-                MessageBox.Show("下载必应壁纸失败");
-
-                Environment.Exit(-1);
-
-                return "";
+                Img_bing.Source = new BitmapImage(nextImgUri);
             }
         }
 
         private void Btn_switch_Click(object sender, RoutedEventArgs e)
         {
-            var pInvoke = SystemParametersInfo(20, 0, _imgPath, 2);
+            var pInvoke = SystemParametersInfo(20, 0, _getter.Current(), 2);
 
             if (pInvoke == 1)
             {
