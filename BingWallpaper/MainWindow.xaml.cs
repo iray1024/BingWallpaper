@@ -15,7 +15,6 @@ namespace BingWallpaper
     /// </summary>
     public partial class MainWindow : Window
     {
-
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfo", CharSet = CharSet.Unicode)]
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
@@ -57,7 +56,7 @@ namespace BingWallpaper
         {
             using var client = new WebClient();
 
-            var filePath = Path.Combine(Path.GetTempPath(), $"bing-{DateTime.Now.Date:yyyy_mm_dd}.jpg");
+            var filePath = Path.Combine(Path.GetTempPath(), ".wallpaper", $"bing-{DateTime.Now.Date:yyyy_mm_dd}.jpg");
 
             await client.DownloadFileTaskAsync(url, filePath);
 
