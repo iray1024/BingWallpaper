@@ -45,11 +45,23 @@ namespace BingWallpaper
         {
             using var client = new WebClient() { Encoding = Encoding.UTF8 };
 
-            var html = await client.DownloadStringTaskAsync("https://cn.bing.com/");
+            try
+            {
+                var html = await client.DownloadStringTaskAsync("https://cn.bing.com/");
 
-            var match = Regex.Match(html, "rel=\"preload\".*?href=\"(.+?)\" as=\"image\"");
+                var match = Regex.Match(html, "rel=\"preload\".*?href=\"(.+?)\" as=\"image\"");
 
-            return string.Format("https://cn.bing.com{0}", match.Groups[1].Value);
+                return string.Format("https://cn.bing.com{0}", match.Groups[1].Value);
+            }
+            catch (WebException)
+            {
+
+                MessageBox.Show("获取必应壁纸失败", "BingWallpaper - Ray", MessageBoxButton.OK, MessageBoxImage.Stop);
+
+                Environment.Exit(-1);
+
+                return "";
+            }
         }
 
         private static async Task<string> DownloadWallpaperFileAsync(string url)
@@ -58,10 +70,20 @@ namespace BingWallpaper
 
             var filePath = Path.Combine(Path.GetTempPath(), ".wallpaper", $"bing-{DateTime.Now.Date:yyyy_mm_dd}.jpg");
 
-            await client.DownloadFileTaskAsync(url, filePath);
+            try
+            {
+                await client.DownloadFileTaskAsync(url, filePath);
 
-            return filePath;
+                return filePath;
+            }
+            catch (WebException)
+            {
+                MessageBox.Show("下载必应壁纸失败");
 
+                Environment.Exit(-1);
+
+                return "";
+            }
         }
 
         private void Btn_switch_Click(object sender, RoutedEventArgs e)
