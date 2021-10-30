@@ -13,5 +13,6 @@
         <Button x:Name="Btn_switch" Content="更换壁纸" Width="80" Height="25" Margin="0,304,0,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_Click" VerticalAlignment="Top" HorizontalAlignment="Center" />
         <Button x:Name="Btn_switch_next" Content="下一张" Width="80" Height="25" Margin="0,304,130,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_next_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
         <Label x:Name="Lb_default" Content="无壁纸" HorizontalAlignment="Center" Margin="0,131,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Label x:Name="Lb_copyright" Content="" HorizontalAlignment="Center" Margin="0,248,0,0" VerticalAlignment="Top" Height="40" Width="488" Foreground="White" FontSize="16" FontWeight="Normal"/>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using BingWallpaper.Proxy;
+﻿using BingWallpaper.Extensions;
+using BingWallpaper.Utilities;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -24,13 +25,13 @@ namespace BingWallpaper
         {
             _getter.Initialize();
 
-            var todayImgUri = _getter.Default();
+            var todayWallpaper = _getter.Default();
 
-            if (todayImgUri is not null)
+            if (todayWallpaper is not null)
             {
-                Img_bing.Source = BitmapLoad(todayImgUri);
+                Img_bing.ChangeImageSource(todayWallpaper.FilePath);
+                Lb_copyright.ChangeContent(todayWallpaper.Copyright);
             }
-
             else
             {
                 Lb_default.Visibility = Visibility.Visible;
@@ -41,21 +42,23 @@ namespace BingWallpaper
         }
         private void Btn_switch_pre_Click(object sender, RoutedEventArgs e)
         {
-            var preImgUri = _getter.Preview();
+            var preWallpaper = _getter.Preview();
 
-            if (preImgUri is not null)
+            if (preWallpaper is not null)
             {
-                Img_bing.Source = BitmapLoad(preImgUri);
+                Img_bing.ChangeImageSource(preWallpaper.FilePath);
+                Lb_copyright.ChangeContent(preWallpaper.Copyright);
             }
         }
 
         private void Btn_switch_next_Click(object sender, RoutedEventArgs e)
         {
-            var nextImgUri = _getter.Next();
+            var nextWallpaper = _getter.Next();
 
-            if (nextImgUri is not null)
+            if (nextWallpaper is not null)
             {
-                Img_bing.Source = BitmapLoad(nextImgUri);
+                Img_bing.ChangeImageSource(nextWallpaper.FilePath);
+                Lb_copyright.ChangeContent(nextWallpaper.Copyright);
             }
         }
 
@@ -63,7 +66,7 @@ namespace BingWallpaper
         {
             try
             {
-                _ = SystemParametersInfo(20, 0, _getter.Current(), 2);
+                _ = SystemParametersInfo(20, 0, _getter.Current()!.FilePath, 2);
             }
             catch
             {
@@ -72,12 +75,12 @@ namespace BingWallpaper
 
         }
 
-        private static BitmapImage BitmapLoad(Uri uri)
+        private static BitmapImage BitmapLoad(string path)
         {
             var bi = new BitmapImage();
 
             bi.BeginInit();
-            bi.UriSource = uri;
+            bi.UriSource = new Uri(path);
             bi.DecodePixelWidth = 1920;
             bi.EndInit();
 

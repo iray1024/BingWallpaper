@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace BingWallpaper.Proxy
+namespace BingWallpaper.Utilities
 {
     internal class BingWallpaperGetter
     {
@@ -36,33 +36,17 @@ namespace BingWallpaper.Proxy
             }
         }
 
-        public Uri? Preview()
-        {
-            var pre = _operator.Preview();
+        public BingWallpaperObject? Preview()
+            => _operator.Preview();
 
-            return pre != null ? new Uri(pre.FilePath) : null;
-        }
+        public BingWallpaperObject? Next()
+            => _operator.Next();
 
-        public Uri? Next()
-        {
-            var next = _operator.Next();
+        public BingWallpaperObject? Default()
+            => _operator.Default();
 
-            return next != null ? new Uri(next.FilePath) : null;
-        }
-
-        public Uri? Default()
-        {
-            var defaultImg = _operator.Default();
-
-            return defaultImg != null ? new Uri(defaultImg.FilePath) : null;
-        }
-
-        public string Current()
-        {
-            var current = _operator.Current();
-
-            return current != null ? current.FilePath : string.Empty;
-        }
+        public BingWallpaperObject? Current()
+            => _operator.Current();
 
         public void Initialize()
         {
@@ -78,6 +62,8 @@ namespace BingWallpaper.Proxy
 
                 foreach (var item in _operator.Images)
                 {
+                    item.Copyright = item.Copyright.Split(" (")[0];
+
                     var filePath = Path.Combine(_savePath, $"bing_{item.EndDate}.jpg");
                     item.FilePath = filePath;
 

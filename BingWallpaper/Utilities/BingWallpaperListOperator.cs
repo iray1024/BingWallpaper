@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BingWallpaper.Proxy
+namespace BingWallpaper.Utilities
 {
     public class BingWallpaperListOperator
     {
