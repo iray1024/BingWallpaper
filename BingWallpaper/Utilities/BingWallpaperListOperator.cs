@@ -4,7 +4,7 @@ namespace BingWallpaper.Utilities
 {
     public class BingWallpaperListOperator
     {
-        public List<BingWallpaperObject> Images { get; set; } = new();
+        public IList<BingWallpaperObject> Images { get; set; } = new List<BingWallpaperObject>();
 
         private int _index = 0;
 

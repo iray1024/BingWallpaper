@@ -1,9 +1,7 @@
 ﻿using BingWallpaper.Extensions;
 using BingWallpaper.Utilities;
-using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace BingWallpaper
 {
@@ -73,18 +71,6 @@ namespace BingWallpaper
                 MessageBox.Show(this, "壁纸设置失败", "发生异常");
             }
 
-        }
-
-        private static BitmapImage BitmapLoad(string path)
-        {
-            var bi = new BitmapImage();
-
-            bi.BeginInit();
-            bi.UriSource = new Uri(path);
-            bi.DecodePixelWidth = 1920;
-            bi.EndInit();
-
-            return bi;
         }
     }
 }
