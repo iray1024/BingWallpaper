@@ -10,14 +10,14 @@ namespace BingWallpaper.Extensions
     internal static class ControlExtensions
     {
         private static readonly AnimationTimeline _opacityRaise = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.8));
-        private static readonly LabelPositionGenerator _positionGenerator = new();
+        private static readonly ContentControlPositionGenerator _posGenerator = new();
 
         internal static void ChangeContent(this Label label, string content)
         {
             label.Content = content;
             label.Opacity = 0D;
 
-            var position = _positionGenerator.Random();
+            var position = _posGenerator.Random();
             label.Margin = position.Thickness;
             label.HorizontalContentAlignment = position.Alignment;
 

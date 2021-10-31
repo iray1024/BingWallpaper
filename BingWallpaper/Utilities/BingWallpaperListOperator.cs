@@ -2,7 +2,7 @@
 
 namespace BingWallpaper.Utilities
 {
-    public class BingWallpaperListOperator
+    internal class BingWallpaperListOperator
     {
         public IList<BingWallpaperObject> Images { get; set; } = new List<BingWallpaperObject>();
 

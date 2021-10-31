@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace BingWallpaper.Utilities
 {
-    internal class BingWallpaperGetter
+    public class BingWallpaperGetter
     {
         private const string BING_WALLPAPER_API_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&n=8&mkt=zh-CN";
         private const string BING_WALLPAPER_URL_PREFIX = "https://cn.bing.com";
