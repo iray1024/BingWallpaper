@@ -19,6 +19,7 @@ namespace BingWallpaper.Utilities
 
         private BingWallpaperListOperator _operator = new();
 
+        private bool _prepared = false;
         private readonly string _savePath;
 
         public BingWallpaperGetter()
@@ -36,11 +37,19 @@ namespace BingWallpaper.Utilities
             }
         }
 
-        public BingWallpaperObject? Preview()
-            => _operator.Preview();
+        public (BingWallpaperObject? Previous, bool Frontend) Previous()
+        {
+            var previous = _operator.Previous();
 
-        public BingWallpaperObject? Next()
-            => _operator.Next();
+            return (previous, _operator.FrontEnd());
+        }
+
+        public (BingWallpaperObject? Next, bool Backend) Next()
+        {
+            var next = _operator.Next();
+
+            return (next, _operator.BackEnd());
+        }
 
         public BingWallpaperObject? Default()
             => _operator.Default();
@@ -98,8 +107,6 @@ namespace BingWallpaper.Utilities
                 }
             }).Wait();
         }
-
-        private bool _prepared = false;
 
         public bool Prepared()
         {

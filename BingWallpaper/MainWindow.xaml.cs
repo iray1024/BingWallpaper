@@ -21,6 +21,10 @@ namespace BingWallpaper
 
         private void Wnd_main_Loaded(object sender, RoutedEventArgs e)
         {
+            Btn_switch_next.IsEnabled = false;
+            Btn_switch.IsEnabled = false;
+            Btn_switch_pre.IsEnabled = false;
+
             Setup();
         }
 
@@ -41,16 +45,14 @@ namespace BingWallpaper
 
                     if (todayWallpaper is not null)
                     {
-                        Ld_main.Dispatcher.Invoke(() => Ld_main.Visibility = Visibility.Hidden);
                         Img_bing.ChangeImageSource(todayWallpaper.FilePath);
                         Lb_copyright.ChangeContent(todayWallpaper.Copyright);
+
+                        LoadSucceed();
                     }
                     else
                     {
-                        Lb_default.Dispatcher.Invoke(() => Lb_default.Visibility = Visibility.Visible);
-                        Btn_switch_pre.IsEnabled = false;
-                        Btn_switch.IsEnabled = false;
-                        Btn_switch_next.IsEnabled = false;
+                        LoadFailed();
                     }
 
                     return;
@@ -60,25 +62,60 @@ namespace BingWallpaper
             }
         }
 
+        private void LoadSucceed()
+        {
+            Ld_main.Dispatcher.Invoke(() => Ld_main.Visibility = Visibility.Hidden);
+            Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = true);
+            Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = true);
+        }
+
+        private void LoadFailed()
+        {
+            Lb_default.Dispatcher.Invoke(() => Lb_default.Visibility = Visibility.Visible);
+            Btn_switch_pre.Dispatcher.Invoke(() => Btn_switch_pre.IsEnabled = false);
+            Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = false);
+            Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = false);
+        }
+
         private void Btn_switch_pre_Click(object sender, RoutedEventArgs e)
         {
-            var preWallpaper = _getter.Preview();
-
-            if (preWallpaper is not null)
+            if (!Btn_switch_next.IsEnabled)
             {
-                Img_bing.ChangeImageSource(preWallpaper.FilePath);
-                Lb_copyright.ChangeContent(preWallpaper.Copyright);
+                Btn_switch_next.IsEnabled = true;
+            }
+
+            var (previous, frontend) = _getter.Previous();
+
+            if (previous is not null)
+            {
+                Img_bing.ChangeImageSource(previous.FilePath);
+                Lb_copyright.ChangeContent(previous.Copyright);
+
+                if (frontend)
+                {
+                    Btn_switch_pre.IsEnabled = false;
+                }
             }
         }
 
         private void Btn_switch_next_Click(object sender, RoutedEventArgs e)
         {
-            var nextWallpaper = _getter.Next();
-
-            if (nextWallpaper is not null)
+            if (!Btn_switch_pre.IsEnabled)
             {
-                Img_bing.ChangeImageSource(nextWallpaper.FilePath);
-                Lb_copyright.ChangeContent(nextWallpaper.Copyright);
+                Btn_switch_pre.IsEnabled = true;
+            }
+
+            var (next, backend) = _getter.Next();
+
+            if (next is not null)
+            {
+                Img_bing.ChangeImageSource(next.FilePath);
+                Lb_copyright.ChangeContent(next.Copyright);
+
+                if (backend)
+                {
+                    Btn_switch_next.IsEnabled = false;
+                }
             }
         }
 

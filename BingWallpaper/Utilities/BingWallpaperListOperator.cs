@@ -14,11 +14,17 @@ namespace BingWallpaper.Utilities
         public BingWallpaperObject? Current()
             => Images.Count > 0 ? Images[_index] : null;
 
-        public BingWallpaperObject? Preview()
+        public BingWallpaperObject? Previous()
             => _index > 0 ? Images[--_index] : null;
 
         public BingWallpaperObject? Next()
             => _index < Images.Count - 1 ? Images[++_index] : null;
+
+        public bool FrontEnd()
+            => _index == 0;
+
+        public bool BackEnd()
+            => _index == Images.Count - 1;
     }
 
     public class BingWallpaperObject
