@@ -1,6 +1,8 @@
 ﻿using BingWallpaper.Extensions;
 using BingWallpaper.Utilities;
+using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace BingWallpaper
@@ -15,29 +17,49 @@ namespace BingWallpaper
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        private void Wnd_main_Loaded(object sender, RoutedEventArgs e)
+        {
             Setup();
         }
 
         private void Setup()
         {
-            _getter.Initialize();
+            Task.Run(() => _getter.Initialize());
 
-            var todayWallpaper = _getter.Default();
+            Task.Run(() => Prepare());
+        }
 
-            if (todayWallpaper is not null)
+        private void Prepare()
+        {
+            while (true)
             {
-                Img_bing.ChangeImageSource(todayWallpaper.FilePath);
-                Lb_copyright.ChangeContent(todayWallpaper.Copyright);
-            }
-            else
-            {
-                Lb_default.Visibility = Visibility.Visible;
-                Btn_switch_pre.IsEnabled = false;
-                Btn_switch.IsEnabled = false;
-                Btn_switch_next.IsEnabled = false;
+                if (_getter.Prepared())
+                {
+                    var todayWallpaper = _getter.Default();
+
+                    if (todayWallpaper is not null)
+                    {
+                        Ld_main.Dispatcher.Invoke(() => Ld_main.Visibility = Visibility.Hidden);
+                        Img_bing.ChangeImageSource(todayWallpaper.FilePath);
+                        Lb_copyright.ChangeContent(todayWallpaper.Copyright);
+                    }
+                    else
+                    {
+                        Lb_default.Dispatcher.Invoke(() => Lb_default.Visibility = Visibility.Visible);
+                        Btn_switch_pre.IsEnabled = false;
+                        Btn_switch.IsEnabled = false;
+                        Btn_switch_next.IsEnabled = false;
+                    }
+
+                    return;
+                }
+
+                Task.Delay(10).Wait();
             }
         }
+
         private void Btn_switch_pre_Click(object sender, RoutedEventArgs e)
         {
             var preWallpaper = _getter.Preview();
@@ -71,6 +93,14 @@ namespace BingWallpaper
                 MessageBox.Show(this, "壁纸设置失败", "发生异常");
             }
 
+        }
+
+        private void OnDefaultLoaded(object? sender, EventArgs e)
+        {
+            var todayWallpaper = _getter.Default()!;
+
+            Img_bing.ChangeImageSource(todayWallpaper.FilePath);
+            Lb_copyright.ChangeContent(todayWallpaper.Copyright);
         }
     }
 }

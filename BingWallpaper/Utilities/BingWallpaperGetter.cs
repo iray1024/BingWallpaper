@@ -69,12 +69,20 @@ namespace BingWallpaper.Utilities
 
                     if (File.Exists(filePath))
                     {
+                        if (!_prepared)
+                        {
+                            _prepared = true;
+                        }
                         continue;
                     }
 
                     try
                     {
                         await _client.DownloadFileTaskAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
+                        if (!_prepared)
+                        {
+                            _prepared = true;
+                        }
                     }
                     catch (WebException)
                     {
@@ -84,11 +92,18 @@ namespace BingWallpaper.Utilities
 
                 if (fault_tolerance == 0)
                 {
-                    MessageBox.Show("下载必应壁纸失败");
+                    MessageBox.Show("网络连接失败", "发生错误");
 
                     Environment.Exit(-1);
                 }
             }).Wait();
+        }
+
+        private bool _prepared = false;
+
+        public bool Prepared()
+        {
+            return _prepared;
         }
     }
 }

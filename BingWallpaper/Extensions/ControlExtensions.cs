@@ -14,29 +14,39 @@ namespace BingWallpaper.Extensions
 
         internal static void ChangeContent(this Label label, string content)
         {
-            label.Content = content;
-            label.Opacity = 0D;
+            label.Dispatcher.Invoke(() =>
+            {
+                var position = _posGenerator.Random();
 
-            var position = _posGenerator.Random();
-            label.Margin = position.Thickness;
-            label.HorizontalContentAlignment = position.Alignment;
+                label.Content = content;
+                label.Opacity = 0D;
 
-            label.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+                label.Margin = position.Thickness;
+                label.HorizontalContentAlignment = position.Alignment;
+
+                label.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+            });
         }
 
         internal static void ChangeImageSource(this Image image, string path)
         {
-            var bi = new BitmapImage();
+            image.Dispatcher.Invoke(() =>
+            {
+                var bi = new BitmapImage();
 
-            bi.BeginInit();
-            bi.UriSource = new Uri(path);
-            bi.DecodePixelWidth = 1920;
-            bi.EndInit();
+                bi.BeginInit();
+                bi.UriSource = new Uri(path);
+                bi.DecodePixelWidth = 1920;
+                bi.DecodePixelHeight = 1080;
+                bi.CreateOptions = BitmapCreateOptions.DelayCreation;
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.EndInit();
 
-            image.Opacity = 0D;
-            image.Source = bi;
+                image.Opacity = 0D;
+                image.Source = bi;
 
-            image.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+                image.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+            });
         }
     }
 }

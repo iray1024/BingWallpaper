@@ -11,10 +11,8 @@ namespace BingWallpaper.Utilities
         public BingWallpaperObject? Default()
             => Images.Count > 0 ? Images[0] : null;
 
-
         public BingWallpaperObject? Current()
             => Images.Count > 0 ? Images[_index] : null;
-
 
         public BingWallpaperObject? Preview()
             => _index > 0 ? Images[--_index] : null;
