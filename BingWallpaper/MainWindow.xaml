@@ -1,11 +1,9 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Utilities="clr-namespace:BingWallpaper.Utilities" x:Name="Wnd_main" x:Class="BingWallpaper.MainWindow"
-        Title="BingWallpaper - Ray" Height="385" Width="528" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/favicon.png" Loaded="Wnd_main_Loaded">
-    <Grid>
+        Title="BingWallpaper - 子墨" Height="385" Width="528" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/favicon.png" Loaded="Wnd_main_Loaded">
+    <Grid x:Name="Grd_main">
         <Image x:Name="Img_bing" Margin="0,-4,0,54"/>
 
         <Button x:Name="Btn_switch_pre" Content="上一张" Width="80" Height="25" Margin="130,304,0,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_pre_Click" VerticalAlignment="Top" HorizontalAlignment="Left" />
@@ -13,6 +11,6 @@
         <Button x:Name="Btn_switch_next" Content="下一张" Width="80" Height="25" Margin="0,304,130,0" FontFamily="Microsoft YaHei" Background="#FFF7F3F3" Click="Btn_switch_next_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
         <Label x:Name="Lb_default" Content="无壁纸" HorizontalAlignment="Center" Margin="0,131,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
         <Label x:Name="Lb_copyright" Content="" HorizontalAlignment="Center" Margin="0,248,0,0" VerticalAlignment="Top" Height="40" Width="488" Foreground="White" FontSize="16" FontWeight="Normal"/>
-        <Utilities:Loading x:Name="Ld_main" HorizontalAlignment="Center" Margin="0,120,0,0" VerticalAlignment="Top"/>
+        <Utilities:Loading x:Name="Ld_main" HorizontalAlignment="Center" Margin="0,115,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

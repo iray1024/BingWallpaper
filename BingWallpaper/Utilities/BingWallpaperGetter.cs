@@ -1,9 +1,8 @@
-﻿using System;
+﻿using BingWallpaper.Models;
+using System;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -15,20 +14,14 @@ namespace BingWallpaper.Utilities
         private const string BING_WALLPAPER_URL_PREFIX = "https://cn.bing.com";
 
         private readonly WebClient _client = new() { Encoding = Encoding.UTF8 };
-        private readonly JsonSerializerOptions _serializerOptions;
-
-        private BingWallpaperListOperator _operator = new();
+        private BingWallpaperOperator _operator = new();
 
         private bool _prepared = false;
+        private bool _reloaded = false;
         private readonly string _savePath;
 
         public BingWallpaperGetter()
         {
-            _serializerOptions = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
             _savePath = Path.Combine(Path.GetTempPath(), ".wallpaper");
 
             if (!Directory.Exists(_savePath))
@@ -37,19 +30,13 @@ namespace BingWallpaper.Utilities
             }
         }
 
-        public (BingWallpaperObject? Previous, bool Frontend) Previous()
-        {
-            var previous = _operator.Previous();
+        public BingWallpaperAggregation Previous()
+            => new(_operator.Previous(), _operator.GetIndex(), _operator.GetIndexState());
 
-            return (previous, _operator.FrontEnd());
-        }
 
-        public (BingWallpaperObject? Next, bool Backend) Next()
-        {
-            var next = _operator.Next();
+        public BingWallpaperAggregation Next()
+            => new(_operator.Next(), _operator.GetIndex(), _operator.GetIndexState());
 
-            return (next, _operator.BackEnd());
-        }
 
         public BingWallpaperObject? Default()
             => _operator.Default();
@@ -61,11 +48,7 @@ namespace BingWallpaper.Utilities
         {
             Task.Run(async () =>
             {
-                using var httpClient = new HttpClient();
-
-                var stream = await httpClient.GetStreamAsync(BING_WALLPAPER_API_URL).ConfigureAwait(false);
-
-                _operator = await JsonSerializer.DeserializeAsync<BingWallpaperListOperator>(stream, _serializerOptions) ?? _operator;
+                _operator = await BingWallpaperOperatorFactory.Operator(BING_WALLPAPER_API_URL) ?? _operator;
 
                 var fault_tolerance = _operator.Images.Count;
 
@@ -108,9 +91,58 @@ namespace BingWallpaper.Utilities
             }).Wait();
         }
 
-        public bool Prepared()
+        public void Reload(int index)
         {
-            return _prepared;
+            _reloaded = false;
+
+            Task.Run(async () =>
+            {
+                var temp = await BingWallpaperOperatorFactory.Operator(BING_WALLPAPER_API_URL) ?? new();
+
+                var fault_tolerance = temp.Images.Count;
+
+                var idx = 0;
+
+                foreach (var item in temp.Images)
+                {
+                    var filePath = Path.Combine(_savePath, $"bing_{item.EndDate}.jpg");
+
+                    if (File.Exists(filePath))
+                    {
+                        idx++;
+                        continue;
+                    }
+
+                    try
+                    {
+                        await _client.DownloadFileTaskAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
+
+                        if (idx == index)
+                        {
+                            _reloaded = true;
+                        }
+                    }
+                    catch (WebException)
+                    {
+                        fault_tolerance--;
+                    }
+
+                    idx++;
+                }
+
+                if (fault_tolerance == 0)
+                {
+                    MessageBox.Show("网络连接失败", "发生错误");
+
+                    Environment.Exit(-1);
+                }
+            }).Wait();
         }
+
+        public bool Prepared()
+            => _prepared;
+
+        public bool Reloaded()
+            => _reloaded;
     }
 }

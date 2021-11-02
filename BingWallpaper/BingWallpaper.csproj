@@ -5,15 +5,8 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <DebugType>full</DebugType>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="favicon.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="favicon.ico" />
