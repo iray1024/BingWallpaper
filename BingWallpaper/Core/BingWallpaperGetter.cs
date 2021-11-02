@@ -1,4 +1,5 @@
-﻿using BingWallpaper.Models;
+﻿using BingWallpaper.Core.Abstractions;
+using BingWallpaper.Models;
 using System;
 using System.IO;
 using System.Net;
@@ -6,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace BingWallpaper.Utilities
+namespace BingWallpaper.Core
 {
-    public class BingWallpaperGetter
+    public class BingWallpaperGetter : IBingWallpaperGetter
     {
-        private const string BING_WALLPAPER_API_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&n=8&mkt=zh-CN";
+        private static string BING_WALLPAPER_API_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&n=8&mkt=zh-CN";
         private const string BING_WALLPAPER_URL_PREFIX = "https://cn.bing.com";
 
         private readonly WebClient _client = new() { Encoding = Encoding.UTF8 };
@@ -20,6 +21,8 @@ namespace BingWallpaper.Utilities
         private bool _reloaded = false;
         private readonly string _savePath;
 
+        public static BingWallpaperGetter Instance { get; } = new();
+
         public BingWallpaperGetter()
         {
             _savePath = Path.Combine(Path.GetTempPath(), ".wallpaper");
@@ -27,6 +30,44 @@ namespace BingWallpaper.Utilities
             if (!Directory.Exists(_savePath))
             {
                 Directory.CreateDirectory(_savePath);
+            }
+        }
+
+        public string GetBingWallpaperAPIEndpoint()
+            => BING_WALLPAPER_API_URL;
+
+        public bool SetBingWallpaperAPIEndpoint(string endpoint)
+        {
+            if (VerifyBingWallpaperAPIEndpoint(endpoint))
+            {
+                BING_WALLPAPER_API_URL = endpoint;
+
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("设置的Endpoint无效", "设置失败", MessageBoxButton.OK);
+
+                return false;
+            }
+        }
+
+        public bool VerifyBingWallpaperAPIEndpoint(string endpoint)
+        {
+            try
+            {
+                var @operator = BingWallpaperOperatorFactory.Operator(endpoint).Result;
+
+                if (@operator is null || @operator.Images.Count == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -91,7 +132,7 @@ namespace BingWallpaper.Utilities
             }).Wait();
         }
 
-        public void Reload(int index)
+        public void Reload(int breakpoint)
         {
             _reloaded = false;
 
@@ -101,7 +142,7 @@ namespace BingWallpaper.Utilities
 
                 var fault_tolerance = temp.Images.Count;
 
-                var idx = 0;
+                var index = 0;
 
                 foreach (var item in temp.Images)
                 {
@@ -109,7 +150,7 @@ namespace BingWallpaper.Utilities
 
                     if (File.Exists(filePath))
                     {
-                        idx++;
+                        index++;
                         continue;
                     }
 
@@ -117,7 +158,7 @@ namespace BingWallpaper.Utilities
                     {
                         await _client.DownloadFileTaskAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
 
-                        if (idx == index)
+                        if (index == breakpoint)
                         {
                             _reloaded = true;
                         }
@@ -127,7 +168,7 @@ namespace BingWallpaper.Utilities
                         fault_tolerance--;
                     }
 
-                    idx++;
+                    index++;
                 }
 
                 if (fault_tolerance == 0)

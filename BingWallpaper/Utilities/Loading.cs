@@ -31,5 +31,13 @@ namespace BingWallpaper.Utilities
             get => (Color)GetValue(FillColorProperty);
             set => SetValue(FillColorProperty, value);
         }
+
+        public static Loading Create()
+            => new()
+            {
+                Margin = new Thickness(0, 115, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Top
+            };
     }
 }

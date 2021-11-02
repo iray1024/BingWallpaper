@@ -1,7 +1,7 @@
 ﻿using BingWallpaper.Models;
 using System.Collections.Generic;
 
-namespace BingWallpaper.Utilities
+namespace BingWallpaper.Core
 {
     internal class BingWallpaperOperator
     {

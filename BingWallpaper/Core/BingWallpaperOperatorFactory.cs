@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BingWallpaper.Utilities
+namespace BingWallpaper.Core
 {
     internal static class BingWallpaperOperatorFactory
     {

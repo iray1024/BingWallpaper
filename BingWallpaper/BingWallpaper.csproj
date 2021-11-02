@@ -5,15 +5,13 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>    
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="favicon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="favicon.png" />
+	<Content Include="Resources\favicon.ico" />
+	<PackageReference Include="HandyControl" Version="3.2.0" />
+    <Resource Include="Resources\favicon.png" />    
   </ItemGroup>
 
 </Project>

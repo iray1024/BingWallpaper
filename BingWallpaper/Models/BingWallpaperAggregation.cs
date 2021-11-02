@@ -1,4 +1,6 @@
-﻿namespace BingWallpaper.Models
+﻿using BingWallpaper.Core;
+
+namespace BingWallpaper.Models
 {
     public class BingWallpaperAggregation
     {
@@ -14,12 +16,5 @@
             Index = index;
             IndexState = indexState;
         }
-    }
-
-    public enum IndexState : byte
-    {
-        Normal,
-        FrontEnd,
-        BackEnd
     }
 }
