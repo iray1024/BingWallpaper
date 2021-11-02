@@ -32,7 +32,14 @@ namespace BingWallpaper
 
         private void Setup()
         {
-            Task.Run(() => _getter.Initialize());
+            Task.Run(() =>
+            {
+                _getter.Initialize();
+                Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = true);
+                Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = true);
+
+            });
+
             Task.Run(() => Prepare());
         }
 
@@ -100,11 +107,14 @@ namespace BingWallpaper
                 }
                 else
                 {
-                    Img_bing.Source = null;
-                    var loading = new Loading();
-                    Grd_main.Children.Add(loading);
+                    var loading = ReadyToReload();
 
-                    Task.Run(() => _getter.Reload(previous.Index));
+                    Task.Run(() =>
+                    {
+                        _getter.Reload(previous.Index);
+                        ReloadCompleted(previous);
+                    });
+
                     Task.Run(() => Reload(ReloadCallback(loading, previous)));
                 }
             }
@@ -133,11 +143,14 @@ namespace BingWallpaper
                 }
                 else
                 {
-                    Img_bing.Source = null;
-                    var loading = new Loading();
-                    Grd_main.Children.Add(loading);
+                    var loading = ReadyToReload();
 
-                    Task.Run(() => _getter.Reload(next.Index));
+                    Task.Run(() =>
+                    {
+                        _getter.Reload(next.Index);
+                        ReloadCompleted(next);
+                    });
+
                     Task.Run(() => Reload(ReloadCallback(loading, next)));
                 }
             }
@@ -158,8 +171,6 @@ namespace BingWallpaper
         private void LoadSucceed()
         {
             Grd_main.Dispatcher.Invoke(() => Grd_main.Children.Remove(Ld_main));
-            Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = true);
-            Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = true);
         }
 
         private void LoadFailed()
@@ -170,6 +181,38 @@ namespace BingWallpaper
             Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = false);
         }
 
+        private UIElement ReadyToReload()
+        {
+            Btn_switch_pre.Dispatcher.Invoke(() => Btn_switch_pre.IsEnabled = false);
+            Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = false);
+            Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = false);
+
+            Img_bing.Source = null;
+            var loading = new Loading();
+            Grd_main.Children.Add(loading);
+
+            return loading;
+        }
+
+        private void ReloadCompleted(BingWallpaperAggregation bingWallpaper)
+        {
+            Btn_switch.Dispatcher.Invoke(() => Btn_switch.IsEnabled = true);
+
+            if (bingWallpaper.IndexState is IndexState.FrontEnd)
+            {
+                Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = true);
+            }
+            else if (bingWallpaper.IndexState is IndexState.BackEnd)
+            {
+                Btn_switch_pre.Dispatcher.Invoke(() => Btn_switch_pre.IsEnabled = true);
+            }
+            else if (bingWallpaper.IndexState is IndexState.Normal)
+            {
+                Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = true);
+                Btn_switch_pre.Dispatcher.Invoke(() => Btn_switch_pre.IsEnabled = true);
+            }
+        }
+
         private Action ReloadCallback(UIElement iElement, BingWallpaperAggregation bingWallpaper)
             => new(() =>
             {
@@ -178,15 +221,6 @@ namespace BingWallpaper
                     Grd_main.Dispatcher.Invoke(() => Grd_main.Children.Remove(iElement));
                     Img_bing.Dispatcher.Invoke(() => Img_bing.ChangeImageSource(bingWallpaper.Instance.FilePath));
                     Lb_copyright.Dispatcher.Invoke(() => Lb_copyright.ChangeContent(bingWallpaper.Instance.Copyright));
-
-                    if (bingWallpaper.IndexState is IndexState.FrontEnd)
-                    {
-                        Btn_switch_pre.Dispatcher.Invoke(() => Btn_switch_pre.IsEnabled = false);
-                    }
-                    else if (bingWallpaper.IndexState is IndexState.BackEnd)
-                    {
-                        Btn_switch_next.Dispatcher.Invoke(() => Btn_switch_next.IsEnabled = false);
-                    }
                 }
             });
 
