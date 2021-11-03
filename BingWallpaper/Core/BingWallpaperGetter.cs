@@ -1,11 +1,11 @@
 ﻿using BingWallpaper.Core.Abstractions;
+using BingWallpaper.Extensions;
 using BingWallpaper.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,7 +16,7 @@ namespace BingWallpaper.Core
         private static string BING_WALLPAPER_API_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&n=8&idx=0";
         private const string BING_WALLPAPER_URL_PREFIX = "https://cn.bing.com";
 
-        private readonly WebClient _client = new() { Encoding = Encoding.UTF8 };
+        private readonly HttpClient _httpClient = new() { Timeout = TimeSpan.FromSeconds(3) };
         private BingWallpaperOperator _operator = new();
 
         private bool _prepared = false;
@@ -110,13 +110,13 @@ namespace BingWallpaper.Core
 
                     try
                     {
-                        await _client.DownloadFileTaskAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
+                        await _httpClient.DownloadFileAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
                         if (!_prepared)
                         {
                             _prepared = true;
                         }
                     }
-                    catch (WebException)
+                    catch (HttpRequestException)
                     {
                         fault_tolerance--;
                     }
@@ -160,9 +160,9 @@ namespace BingWallpaper.Core
 
                     try
                     {
-                        await _client.DownloadFileTaskAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
+                        await _httpClient.DownloadFileAsync($"{BING_WALLPAPER_URL_PREFIX}{item.Url}", filePath);
                     }
-                    catch (WebException)
+                    catch (HttpRequestException)
                     {
                         fault_tolerance--;
                     }
