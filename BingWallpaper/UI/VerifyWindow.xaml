@@ -1,11 +1,11 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="Wnd_verify" x:Class="BingWallpaper.VerifyWindow"
-        Title="Verify BingWallpaper API Endpoint" Height="175" Width="490" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="False" Loaded="Wnd_verify_Loaded">
+        Title="Verify BingWallpaper API Endpoint" Height="175" Width="490" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Topmost="False" Loaded="Wnd_verify_Loaded">
     <Grid>
-        <Button x:Name="Btn_verify" Style="{StaticResource ButtonInfo}" Content="验证" HorizontalAlignment="Left" Margin="140,78,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="Btn_verify_Click"/>
-        <Button x:Name="Btn_set" Style="{StaticResource ButtonInfo}" Content="设置" Margin="0,78,140,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="80" Height="30" FontSize="14" Click="Btn_set_Click"/>
+        <Button x:Name="Btn_verify" Style="{DynamicResource MaterialDesignRaisedButton}" Content="验证" HorizontalAlignment="Left" Margin="140,78,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="Btn_verify_Click" Cursor="Hand"/>
+        <Button x:Name="Btn_set" Style="{DynamicResource MaterialDesignRaisedButton}" Content="设置" Margin="0,78,140,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="80" Height="30" FontSize="14" Click="Btn_set_Click"/>
         <TextBox x:Name="Tb_endpoint" Margin="18,25,18,0" Text="{Binding BingWallpaperAPIEndpoint, Mode=OneWay}" VerticalAlignment="Top" Height="25" VerticalContentAlignment="Center" TextChanged="Tb_endpoint_TextChanged" />
     </Grid>
 </Window>

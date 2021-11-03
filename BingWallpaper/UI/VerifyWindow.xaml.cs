@@ -3,12 +3,10 @@ using BingWallpaper.Core.Abstractions;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace BingWallpaper
 {
-    /// <summary>
-    /// VerifyWindow.xaml 的交互逻辑
-    /// </summary>
     public partial class VerifyWindow : Window
     {
         private readonly EndpointDataBinding _bindings = new();
@@ -27,11 +25,15 @@ namespace BingWallpaper
         {
             if (_bindings.Getter.SetBingWallpaperAPIEndpoint(Tb_endpoint.Text))
             {
+                DialogResult = true;
+
                 Close();
             }
             else
             {
                 SwitchVerifyState(VerifyState.Failed);
+
+                MessageBox.Show("设置的Endpoint无效", "设置失败", MessageBoxButton.OK);
             }
         }
 
@@ -57,17 +59,17 @@ namespace BingWallpaper
             if (state is VerifyState.Succeed)
             {
                 Btn_verify.Content = "✔️";
-                Btn_verify.SetResourceReference(StyleProperty, "ButtonSuccess");
+                Btn_verify.Background = new SolidColorBrush(Color.FromRgb(62, 220, 58));
             }
             else if (state is VerifyState.Failed)
             {
                 Btn_verify.Content = "❌";
-                Btn_verify.SetResourceReference(StyleProperty, "ButtonDanger");
+                Btn_verify.Background = new SolidColorBrush(Color.FromRgb(245, 20, 26));
             }
             else
             {
                 Btn_verify.Content = "验证";
-                Btn_verify.SetResourceReference(StyleProperty, "ButtonInfo");
+                Btn_verify.Background = new SolidColorBrush(Color.FromRgb(103, 58, 183));
             }
         }
     }

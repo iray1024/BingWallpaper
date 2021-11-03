@@ -12,9 +12,9 @@ namespace BingWallpaper.Core.Abstractions
 
         BingWallpaperAggregation Next();
 
-        BingWallpaperObject? Default();
+        BingWallpaperAggregation Default();
 
-        BingWallpaperObject? Current();
+        BingWallpaperAggregation Current();
 
         bool Prepared();
 

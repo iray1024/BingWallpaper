@@ -14,7 +14,7 @@ namespace BingWallpaper.Extensions
 
         internal static void ChangeContent(this Label label, string content)
         {
-            label.Dispatcher.Invoke(() =>
+            label.CrossThreadAccess(() =>
             {
                 var position = _posGenerator.Random();
 
@@ -30,7 +30,7 @@ namespace BingWallpaper.Extensions
 
         internal static void ChangeImageSource(this Image image, string path)
         {
-            image.Dispatcher.Invoke(() =>
+            image.CrossThreadAccess(() =>
             {
                 var bi = new BitmapImage();
 

@@ -10,7 +10,7 @@
 
   <ItemGroup>
 	<Content Include="Resources\favicon.ico" />
-	<PackageReference Include="HandyControl" Version="3.2.0" />
+	<PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
     <Resource Include="Resources\favicon.png" />    
   </ItemGroup>
 

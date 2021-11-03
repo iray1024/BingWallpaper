@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace BingWallpaper
 {
@@ -106,7 +107,7 @@ namespace BingWallpaper
         {
             try
             {
-                _ = SystemParametersInfo(20, 0, _getter.Current()!.FilePath, 2);
+                _ = SystemParametersInfo(20, 0, _getter.Current().Instance!.FilePath, 2);
             }
             catch
             {
@@ -114,16 +115,36 @@ namespace BingWallpaper
             }
         }
 
-        private void CommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
         }
 
-        private void CommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var wnd = new VerifyWindow();
+            var wnd = new VerifyWindow
+            {
+                Owner = this
+            };
 
-            wnd.ShowDialog();
+            var result = wnd.ShowDialog();
+
+            if (result.HasValue && result.Value)
+            {
+                var loading = ReadyToReload();
+
+                BingWallpaperAggregation? temp = null;
+                Task.Run(() =>
+                {
+                    _getter.Initialize();
+
+                    temp = _getter.Default();
+
+                    ReloadCompleted(temp);
+                });
+
+                Task.Run(() => ReInitialize(ReloadCallback(loading, _getter.Default())));
+            }
         }
     }
 
@@ -151,8 +172,8 @@ namespace BingWallpaper
 
                     if (todayWallpaper is not null)
                     {
-                        Img_bing.ChangeImageSource(todayWallpaper.FilePath);
-                        Lb_copyright.ChangeContent(todayWallpaper.Copyright);
+                        Img_bing.ChangeImageSource(todayWallpaper.Instance!.FilePath);
+                        Lb_copyright.ChangeContent(todayWallpaper.Instance!.Copyright);
 
                         LoadSucceed();
                     }
@@ -180,6 +201,20 @@ namespace BingWallpaper
             while (true)
             {
                 if (_getter.Reloaded())
+                {
+                    action();
+                    return;
+                }
+
+                Task.Delay(10).Wait();
+            }
+        }
+
+        private void ReInitialize(Action action)
+        {
+            while (true)
+            {
+                if (_getter.Prepared())
                 {
                     action();
                     return;
