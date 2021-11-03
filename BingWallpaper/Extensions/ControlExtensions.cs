@@ -1,5 +1,4 @@
-﻿using BingWallpaper.Utilities;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -10,19 +9,13 @@ namespace BingWallpaper.Extensions
     internal static class ControlExtensions
     {
         private static readonly AnimationTimeline _opacityRaise = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.8));
-        private static readonly ContentControlPositionGenerator _posGenerator = new();
 
         internal static void ChangeContent(this Label label, string content)
         {
             label.CrossThreadAccess(() =>
             {
-                var position = _posGenerator.Random();
-
                 label.Content = content;
                 label.Opacity = 0D;
-
-                label.Margin = position.Thickness;
-                label.HorizontalContentAlignment = position.Alignment;
 
                 label.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
             });
@@ -46,6 +39,16 @@ namespace BingWallpaper.Extensions
                 image.Source = bi;
 
                 image.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+            });
+        }
+
+        internal static void ChangeOpacoty(this Label label, double from, double to)
+        {
+            label.CrossThreadAccess(() =>
+            {
+                var animation = new DoubleAnimation(from, to, TimeSpan.FromSeconds(0.4));
+
+                label.BeginAnimation(UIElement.OpacityProperty, animation, HandoffBehavior.SnapshotAndReplace);
             });
         }
     }

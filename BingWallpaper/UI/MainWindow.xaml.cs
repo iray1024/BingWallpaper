@@ -146,6 +146,16 @@ namespace BingWallpaper
                 Task.Run(() => ReInitialize(ReloadCallback(loading, _getter.Default())));
             }
         }
+
+        private void Lb_copyright_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Lb_copyright.ChangeOpacoty(1, 0);
+        }
+
+        private void Lb_copyright_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Lb_copyright.ChangeOpacoty(0, 1);
+        }
     }
 
     public partial class MainWindow : Window
@@ -231,6 +241,7 @@ namespace BingWallpaper
 
         private void LoadSucceed()
         {
+            Lb_copyright.CrossThreadAccess(() => Lb_copyright.Visibility = Visibility.Visible);
             Grd_main.CrossThreadAccess(() => Grd_main.Children.Remove(Ld_main));
         }
 
