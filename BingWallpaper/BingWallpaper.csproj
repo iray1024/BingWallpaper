@@ -5,13 +5,13 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>    
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
 	<Content Include="Resources\favicon.ico" />
+    <Resource Include="Resources\favicon.png" />
 	<PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
-    <Resource Include="Resources\favicon.png" />    
   </ItemGroup>
 
 </Project>

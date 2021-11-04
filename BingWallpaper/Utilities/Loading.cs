@@ -35,7 +35,7 @@ namespace BingWallpaper.Utilities
         public static Loading Create()
             => new()
             {
-                Margin = new Thickness(0, 115, 0, 0),
+                Margin = new Thickness(0, 163, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top
             };

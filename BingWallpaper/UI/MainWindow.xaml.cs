@@ -133,12 +133,11 @@ namespace BingWallpaper
             {
                 var loading = ReadyToReload();
 
-                BingWallpaperAggregation? temp = null;
                 Task.Run(() =>
                 {
                     _getter.Initialize();
 
-                    temp = _getter.Default();
+                    var temp = _getter.Default();
 
                     ReloadCompleted(temp);
                 });

@@ -30,7 +30,6 @@ namespace BingWallpaper.Extensions
                 bi.BeginInit();
                 bi.UriSource = new Uri(path);
                 bi.DecodePixelWidth = 1920;
-                bi.DecodePixelHeight = 1080;
                 bi.CreateOptions = BitmapCreateOptions.DelayCreation;
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.EndInit();
