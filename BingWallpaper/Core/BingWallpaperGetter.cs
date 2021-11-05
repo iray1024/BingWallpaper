@@ -1,5 +1,5 @@
-﻿using BingWallpaper.Core.Abstractions;
-using BingWallpaper.Extensions;
+﻿using BingWallpaper.Common;
+using BingWallpaper.Core.Abstractions;
 using BingWallpaper.Models;
 using System;
 using System.Collections.Generic;

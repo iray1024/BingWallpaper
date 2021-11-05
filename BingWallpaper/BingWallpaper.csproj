@@ -5,13 +5,20 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>    
+    <Authors>曾子墨</Authors>
+    <Company>iChike</Company>
   </PropertyGroup>
 
   <ItemGroup>
 	<Content Include="Resources\favicon.ico" />
+	<None Include="..\.editorconfig" Link=".editorconfig" />
     <Resource Include="Resources\favicon.png" />
 	<PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BingWallpaper.PoseidonEngine\BingWallpaper.PoseidonEngine.csproj" />
   </ItemGroup>
 
 </Project>

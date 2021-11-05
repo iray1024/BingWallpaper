@@ -1,11 +1,13 @@
-﻿using BingWallpaper.Core;
+﻿using BingWallpaper.Common;
+using BingWallpaper.Core;
 using BingWallpaper.Core.Abstractions;
 using BingWallpaper.Extensions;
 using BingWallpaper.Models;
+using BingWallpaper.PoseidonEngine.Extensions;
 using BingWallpaper.Utilities;
+using LibVLCSharp.Shared;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -14,14 +16,13 @@ namespace BingWallpaper
 {
     public partial class MainWindow : Window
     {
-        [DllImport("user32.dll", EntryPoint = "SystemParametersInfo", CharSet = CharSet.Unicode)]
-        private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-
         private readonly IBingWallpaperGetter _getter = BingWallpaperGetter.Instance;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            StyleFactory.Initialize(this, Vlc);
         }
 
         private void Wnd_main_Loaded(object sender, RoutedEventArgs e)
@@ -29,6 +30,16 @@ namespace BingWallpaper
             UIElementInitialize();
 
             CoreInitialize();
+
+            Vlc.Visibility = Visibility.Visible;
+
+            var poseidon = Vlc.Inject();
+
+            var media = poseidon.CreateMedia(@"C:\Users\appeon\Desktop\16049705148ab3f3be56f4b4d8.mp4_last.mp4", FromType.FromPath);
+
+            poseidon.Play(media);
+
+            poseidon.SetDesktopWallpaper();
         }
 
         private void Btn_switch_pre_Click(object sender, RoutedEventArgs e)
@@ -107,7 +118,7 @@ namespace BingWallpaper
         {
             try
             {
-                _ = SystemParametersInfo(20, 0, _getter.Current().Instance!.FilePath, 2);
+                _ = DesktopOperator.SetStaticWallpaper(20, 0, _getter.Current().Instance!.FilePath, 2);
             }
             catch
             {
@@ -148,12 +159,12 @@ namespace BingWallpaper
 
         private void Lb_copyright_MouseEnter(object sender, MouseEventArgs e)
         {
-            Lb_copyright.ChangeOpacoty(1, 0);
+            Lb_copyright.ChangeOpacoty(1, 0, TimeSpan.FromSeconds(0.4));
         }
 
         private void Lb_copyright_MouseLeave(object sender, MouseEventArgs e)
         {
-            Lb_copyright.ChangeOpacoty(0, 1);
+            Lb_copyright.ChangeOpacoty(0, 1, TimeSpan.FromSeconds(0.4));
         }
     }
 
@@ -284,8 +295,8 @@ namespace BingWallpaper
                 if (bingWallpaper.Instance is not null)
                 {
                     Grd_main.CrossThreadAccess(() => Grd_main.Children.Remove(iElement));
-                    Img_bing.CrossThreadAccess(() => Img_bing.ChangeImageSource(bingWallpaper.Instance.FilePath));
-                    Lb_copyright.CrossThreadAccess(() => Lb_copyright.ChangeContent(bingWallpaper.Instance.Copyright));
+                    Img_bing.ChangeImageSource(bingWallpaper.Instance.FilePath);
+                    Lb_copyright.ChangeContent(bingWallpaper.Instance.Copyright);
                 }
             });
 

@@ -1,21 +1,12 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:Utilities="clr-namespace:BingWallpaper.Utilities" x:Name="Wnd_main" x:Class="BingWallpaper.MainWindow"
-        xmlns:Core="clr-namespace:BingWallpaper.Core"
-        Title="BingWallpaper - 子墨" Height="480" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/Resources/favicon.png" Loaded="Wnd_main_Loaded">
-    <Grid x:Name="Grd_main">
-
-        <Image x:Name="Img_bing" Margin="0,-4,0,54"/>
-
-        <Button x:Name="Btn_switch_pre" Style="{DynamicResource MaterialDesignRaisedButton}" Content="上一张" Width="80" Height="31" Margin="200,397,0,0" FontFamily="Microsoft YaHei" Click="Btn_switch_pre_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Cursor="Hand" />
-        <Button x:Name="Btn_switch" Style="{DynamicResource MaterialDesignRaisedButton}" Content="更换壁纸" Height="31" Margin="297,397,297,0" FontFamily="Microsoft YaHei" Click="Btn_switch_Click" VerticalAlignment="Top" Cursor="Hand" />
-        <Button x:Name="Btn_switch_next" Style="{DynamicResource MaterialDesignRaisedButton}" Content="下一张" Width="80" Height="31" Margin="0,397,200,0" FontFamily="Microsoft YaHei" Click="Btn_switch_next_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
-        <Label x:Name="Lb_default" Content="无壁纸" HorizontalAlignment="Center" Margin="0,131,0,0" VerticalAlignment="Top" Visibility="Hidden" Background="{x:Null}" Foreground="Black" FontSize="30" FontFamily="Microsoft YaHei" />
-        <Utilities:Loading x:Name="Ld_main" HorizontalAlignment="Center" Margin="0,163,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="Lb_copyright" Margin="0,-4,0,58" Background="#A5252525" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Foreground="White" FontFamily="Microsoft YaHei" MouseEnter="Lb_copyright_MouseEnter" MouseLeave="Lb_copyright_MouseLeave" Visibility="Hidden" />
-    </Grid>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:vlc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
+    xmlns:Utilities="clr-namespace:BingWallpaper.Utilities"
+    xmlns:Core="clr-namespace:BingWallpaper.Core"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Name="Wnd_main" x:Class="BingWallpaper.MainWindow"
+    Title="BingWallpaper - 子墨" Height="480" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/Resources/favicon.png" Loaded="Wnd_main_Loaded">
 
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="R" Command="Core:VerifyApiCommand.OpenVerifyWndCommand" />
@@ -27,4 +18,18 @@
             CanExecute="CommandBinding_CanExecute" 
             Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
+    
+    <Grid x:Name="Grd_main">
+
+        <vlc:VideoView x:Name="Vlc" Margin="0,-4,0,54" Visibility="Hidden"/>
+        
+        <Image x:Name="Img_bing" Margin="0,-4,0,54"/>
+        <Button x:Name="Btn_switch_pre" Style="{DynamicResource MaterialDesignRaisedButton}" Content="上一张" Width="80" Height="31" Margin="200,397,0,0" FontFamily="Microsoft YaHei" Click="Btn_switch_pre_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Cursor="Hand" />
+        <Button x:Name="Btn_switch" Style="{DynamicResource MaterialDesignRaisedButton}" Content="更换壁纸" Height="31" Margin="297,397,297,0" FontFamily="Microsoft YaHei" Click="Btn_switch_Click" VerticalAlignment="Top" Cursor="Hand" />
+        <Button x:Name="Btn_switch_next" Style="{DynamicResource MaterialDesignRaisedButton}" Content="下一张" Width="80" Height="31" Margin="0,397,200,0" FontFamily="Microsoft YaHei" Click="Btn_switch_next_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+        <Label x:Name="Lb_default" Content="无壁纸" HorizontalAlignment="Center" Margin="0,131,0,0" VerticalAlignment="Top" Visibility="Hidden" Background="{x:Null}" Foreground="Black" FontSize="30" FontFamily="Microsoft YaHei" />
+        <Utilities:Loading x:Name="Ld_main" HorizontalAlignment="Center" Margin="0,163,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="Lb_copyright" Margin="0,-4,0,58" Background="#A5252525" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Foreground="White" FontFamily="Microsoft YaHei" MouseEnter="Lb_copyright_MouseEnter" MouseLeave="Lb_copyright_MouseLeave" Visibility="Hidden" />
+    </Grid>
+
 </Window>

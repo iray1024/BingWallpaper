@@ -2,11 +2,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BingWallpaper.Extensions
+namespace BingWallpaper.Common
 {
-    internal static class HttpClientExtensions
+    public static class HttpClientExtensions
     {
-        internal static async Task DownloadFileAsync(this HttpClient client, string address, string filePath)
+        public static async Task DownloadFileAsync(this HttpClient client, string address, string filePath)
         {
             using var response = await client.GetAsync(address) ?? throw new HttpRequestException();
 

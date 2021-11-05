@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using BingWallpaper.Common;
+using System.Windows;
 
 namespace BingWallpaper
 {
@@ -9,7 +10,7 @@ namespace BingWallpaper
     {
         public App()
         {
-
+            CrossThreadAccessor.Initialize();            
         }
     }
 }
