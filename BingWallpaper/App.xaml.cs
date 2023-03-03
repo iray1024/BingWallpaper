@@ -1,16 +1,15 @@
 ﻿using BingWallpaper.Common;
 using System.Windows;
 
-namespace BingWallpaper
+namespace BingWallpaper;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            CrossThreadAccessor.Initialize();            
-        }
+        CrossThreadAccessor.Initialize();
     }
 }

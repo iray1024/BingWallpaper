@@ -1,9 +1,8 @@
-﻿namespace BingWallpaper.Core
+﻿namespace BingWallpaper.Core;
+
+public enum IndexState : byte
 {
-    public enum IndexState : byte
-    {
-        Normal,
-        FrontEnd,
-        BackEnd
-    }
+    Normal,
+    FrontEnd,
+    BackEnd
 }

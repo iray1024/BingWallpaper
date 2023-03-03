@@ -1,29 +1,28 @@
 ﻿using BingWallpaper.Models;
 
-namespace BingWallpaper.Core.Abstractions
+namespace BingWallpaper.Core.Abstractions;
+
+internal interface IBingWallpaperGetter
 {
-    internal interface IBingWallpaperGetter
-    {
-        void Initialize();
+    void Initialize();
 
-        void Reload(int breakpoint);
+    void Reload(int breakpoint);
 
-        BingWallpaperAggregation Previous();
+    BingWallpaperAggregation Previous();
 
-        BingWallpaperAggregation Next();
+    BingWallpaperAggregation Next();
 
-        BingWallpaperAggregation Default();
+    BingWallpaperAggregation Default();
 
-        BingWallpaperAggregation Current();
+    BingWallpaperAggregation Current();
 
-        bool Prepared();
+    bool Prepared();
 
-        bool Reloaded();
+    bool Reloaded();
 
-        string GetBingWallpaperAPIEndpoint();
+    string GetBingWallpaperAPIEndpoint();
 
-        bool SetBingWallpaperAPIEndpoint(string endpoint);
+    bool SetBingWallpaperAPIEndpoint(string endpoint);
 
-        bool VerifyBingWallpaperAPIEndpoint(string endpoint);
-    }
+    bool VerifyBingWallpaperAPIEndpoint(string endpoint);
 }

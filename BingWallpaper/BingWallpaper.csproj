@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BingWallpaper.PoseidonEngine\BingWallpaper.PoseidonEngine.csproj" />
+    <ProjectReference Include="..\BingWallpaper.Common\BingWallpaper.Common.csproj" />
   </ItemGroup>
 
 </Project>

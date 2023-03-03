@@ -35,10 +35,10 @@ namespace BingWallpaper.Extensions
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.EndInit();
 
-                image.Opacity = 0.1D;
+                //image.Opacity = 0.1D;
                 image.Source = bi;
 
-                image.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
+                //image.BeginAnimation(UIElement.OpacityProperty, _opacityRaise, HandoffBehavior.SnapshotAndReplace);
             });
         }
 

@@ -2,18 +2,17 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BingWallpaper.Core
+namespace BingWallpaper.Core;
+
+internal static class BingWallpaperOperatorFactory
 {
-    internal static class BingWallpaperOperatorFactory
+    private static readonly HttpClient HttpClient = new();
+    private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true };
+
+    public static async Task<BingWallpaperOperator?> Operator(string apiUrl)
     {
-        private static readonly HttpClient HttpClient = new();
-        private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true };
+        var stream = await HttpClient.GetStreamAsync(apiUrl).ConfigureAwait(false);
 
-        public static async Task<BingWallpaperOperator?> Operator(string apiUrl)
-        {
-            var stream = await HttpClient.GetStreamAsync(apiUrl).ConfigureAwait(false);
-
-            return await JsonSerializer.DeserializeAsync<BingWallpaperOperator>(stream, _serializerOptions);
-        }
+        return await JsonSerializer.DeserializeAsync<BingWallpaperOperator>(stream, _serializerOptions);
     }
 }
